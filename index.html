@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+
+
+<!-- Angular Material requires Angular.js Libraries -->
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-resource.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-animate.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-aria.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-messages.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-route.min.js"></script>
+
+<!-- Angular Material Library -->
+<script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.js"></script>
+
+<link rel="stylesheet prefetch" href="https://cdn.gitcdn.link/cdn/angular/bower-material/v1.1.4/angular-material.css">
+
+<body ng-app="myApp">
+<div style="text-align: center;">
+<a href="#">
+    <img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/PjwhRE9DVFlQRSBzdmcgIFBVQkxJQyAnLS8vVzNDLy9EVEQgU1ZHIDEuMS8vRU4nICAnaHR0cDovL3d3dy53My5vcmcvR3JhcGhpY3MvU1ZHLzEuMS9EVEQvc3ZnMTEuZHRkJz48c3ZnIGVuYWJsZS1iYWNrZ3JvdW5kPSJuZXcgMCAwIDQ4IDQ4IiBoZWlnaHQ9IjQ4cHgiIHZlcnNpb249IjEuMSIgdmlld0JveD0iMCAwIDQ4IDQ4IiB3aWR0aD0iNDhweCIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayI+PGcgaWQ9IkV4cGFuZGVkIj48Zz48Zz48cGF0aCBkPSJNNDIsNDhIMjhWMzVoLTh2MTNINlYyN2MwLTAuNTUyLDAuNDQ3LTEsMS0xczEsMC40NDgsMSwxdjE5aDEwVjMzaDEydjEzaDEwVjI4YzAtMC41NTIsMC40NDctMSwxLTFzMSwwLjQ0OCwxLDFWNDh6Ii8+PC9nPjxnPjxwYXRoIGQ9Ik00NywyN2MtMC4yNDksMC0wLjQ5Ny0wLjA5Mi0wLjY5MS0wLjI3N0wyNCw1LjM4NEwxLjY5MSwyNi43MjNjLTAuMzk5LDAuMzgxLTEuMDMyLDAuMzY4LTEuNDE0LTAuMDMxICAgICBjLTAuMzgyLTAuMzk5LTAuMzY3LTEuMDMyLDAuMDMxLTEuNDE0TDI0LDIuNjE2bDIzLjY5MSwyMi42NjFjMC4zOTgsMC4zODIsMC40MTMsMS4wMTUsMC4wMzEsMS40MTQgICAgIEM0Ny41MjYsMjYuODk2LDQ3LjI2NCwyNyw0NywyN3oiLz48L2c+PGc+PHBhdGggZD0iTTM5LDE1Yy0wLjU1MywwLTEtMC40NDgtMS0xVjhoLTZjLTAuNTUzLDAtMS0wLjQ0OC0xLTFzMC40NDctMSwxLTFoOHY4QzQwLDE0LjU1MiwzOS41NTMsMTUsMzksMTV6Ii8+PC9nPjwvZz48L2c+PC9zdmc+">
+</a>
+</div>
+    <div ng-view></div>
+
+
+
+<script>
+    var app= angular.module('myApp', ["ngMaterial", "ngRoute"]);
+    app.service("HolidayService", function() {
+        var selectedDay = [];
+
+        var addSelectedDay = function(newObj) {
+            selectedDay.push(newObj);
+        }
+
+        var getSelectedDay = function () {
+            return selectedDay.pop();
+        }
+
+        return {
+            addSelectedDay: addSelectedDay,
+            getSelectedDay: getSelectedDay
+        };
+    });
+
+    app.config(function($routeProvider) {
+        $routeProvider
+            .when("/", {
+                templateUrl: "holidayMain.html",
+                controller: "holidayCtrl"
+            })
+            .when("/showDetails", {
+                templateUrl : "holidayDetails.html",
+                controller:  "showDetailsCtrl"
+            })
+    });
+
+    app.controller('holidayCtrl', function($scope, $http, HolidayService) {
+        $scope.result = [];
+        $http.get('https://holidayapi.com/v1/holidays?key=710efee1-6378-4490-aea0-9dad87174a5a&country=US&year=2015').
+        then(function(response) {
+            for(var i in response.data.holidays)
+                $scope.result.push([response.data.holidays [i][0]]);
+        });
+
+        $scope.routeFunction = function () {
+            let futureRoute = event.target.href;
+            HolidayService.addSelectedDay(QueryStringToJSON(futureRoute));
+        }
+
+        function QueryStringToJSON(queryStr) {
+            if(queryStr.indexOf('?') > -1) {
+                queryStr = queryStr.split('?')[1];
+            }
+            return JSON.parse(queryStr);
+        }
+    });
+
+    app.controller('showDetailsCtrl', function($scope, HolidayService) {
+        $scope.loadableObj = HolidayService.getSelectedDay();
+    });
+
+
+
+
+</script>
+
+</body>
+</html>

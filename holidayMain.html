@@ -1,0 +1,22 @@
+<div>
+
+    <md-toolbar layout="row" class="md-hue-3" layout-align="center center">
+        <div class="md-toolbar-tools">
+            <span flex></span>
+            <span>Holiday List</span>
+            <span flex></span>
+        </div>
+    </md-toolbar>
+
+    <md-content>
+        <md-list flex="">
+            <md-list-item class="md-3-line" ng-repeat="item in result" ng-click="routeFunction()" ng-href="#/showDetails?{{item}}">
+                <div class="md-list-item-text" layout="column">
+                    <h3>{{ item[0].name }}</h3>
+                </div>
+            </md-list-item>
+        </md-list>
+    </md-content>
+
+
+</div>
