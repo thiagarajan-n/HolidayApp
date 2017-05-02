@@ -11,3 +11,6 @@ How to Launch Chrome in in-Secure mode
     "C:\Program Files (x86)\Google\Chrome\Application\chrome.exe" --disable-web-security --user-data-dir
     
 4. click on Apply
+
+To run the App, Open index.html and you can navigate the app from there.
+
