@@ -58,7 +58,7 @@
 
     app.controller('holidayCtrl', function($scope, $http, HolidayService) {
         $scope.result = [];
-        $http.get('https://holidayapi.com/v1/holidays?key=710efee1-6378-4490-aea0-9dad87174a5a&country=US&year=2015').
+        $http.get('https://holidayapi.com/v1/holidays?key=83f8a999-3d77-4047-b8fa-a4a47dacd558&country=US&year=2015').
         then(function(response) {
             for(var i in response.data.holidays)
                 $scope.result.push([response.data.holidays [i][0]]);
